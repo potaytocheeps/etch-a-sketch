@@ -15,3 +15,11 @@ for (let rowCounter = 1; rowCounter <= gridSize; rowCounter++)
 
     gridContainer.appendChild(row);
 }
+
+const gridCells = document.querySelectorAll('.grid-cell');
+
+gridCells.forEach((gridCell) => {
+    gridCell.addEventListener('mouseenter', (event) => {
+        event.target.style.backgroundColor = '#000';
+    })
+})
