@@ -4,6 +4,14 @@ function deleteGrid(gridContainer)
     {
         gridContainer.removeChild(gridContainer.firstChild);
     }
+
+    // This helps fix a bug where, upon creating a new grid, the "painting" class would
+    // remain on the grid container, and it would take two separate clicks to
+    // be able to start painting on the grid again, instead of the usual single click
+    if (gridContainer.classList.contains('painting'))
+    {
+        gridContainer.classList.remove('painting');
+    }
 }
 
 function paintGridCells(event)
