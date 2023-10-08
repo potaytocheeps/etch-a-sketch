@@ -45,6 +45,19 @@ function addPaintingInteractionToGrid(event)
     }
 }
 
+function getUserInput()
+{
+    let userInput = Number(prompt("Enter size n of new nxn grid (must be within range of 1-100):", 16));
+
+    while (userInput <= 0 || userInput > 100)
+    {
+        alert("Please enter a number that is within the range of 1-100.");
+        userInput = Number(prompt("Enter size n of new nxn grid (must be within range of 1-100):", 16));
+    }
+
+    return userInput;
+}
+
 function createGrid()
 {
     const gridContainer = document.querySelector('.grid-container');
@@ -55,7 +68,7 @@ function createGrid()
         // the new grid will replace the old one and not be appended below it instead
         deleteGrid(gridContainer);
 
-        const gridSize = Number(prompt("Enter size n of new nxn grid:", 16));
+        const gridSize = getUserInput();
 
         for (let rowCounter = 1; rowCounter <= gridSize; rowCounter++)
         {
