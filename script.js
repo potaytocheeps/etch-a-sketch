@@ -1,19 +1,9 @@
-const gridContainer = document.querySelector('.grid-container');
-const gridSize = 16;
-
-for (let rowCounter = 1; rowCounter <= gridSize; rowCounter++)
+function deleteGrid(gridContainer)
 {
-    let row = document.createElement('div');
-    row.classList.add('row');
-
-    for (let gridCellCounter = 1; gridCellCounter <= gridSize; gridCellCounter++)
+    while (gridContainer.hasChildNodes())
     {
-        let gridCell = document.createElement('div');
-        gridCell.classList.add('grid-cell');
-        row.appendChild(gridCell);
+        gridContainer.removeChild(gridContainer.firstChild);
     }
-
-    gridContainer.appendChild(row);
 }
 
 function paintGridCells(event)
@@ -21,11 +11,13 @@ function paintGridCells(event)
     event.target.style.backgroundColor = '#000';
 }
 
-const gridCells = document.querySelectorAll('.grid-cell');
+function addPaintingInteractionToGrid(event)
+{
+    const gridContainer = document.querySelector('.grid-container');
+    const gridCells = document.querySelectorAll('.grid-cell');
 
-// One click on the grid will start the painting process. Another click on the grid will
-// stop it. This happens by toggling the painting class on the grid container on each click
-gridContainer.addEventListener('click', (event) => {
+    // One click on the grid will start the painting process. Another click on the grid will
+    // stop it. This happens by toggling the painting class on the grid container on each click
     event.currentTarget.classList.toggle('painting');
 
     if (gridContainer.classList.contains('painting'))
@@ -43,4 +35,37 @@ gridContainer.addEventListener('click', (event) => {
     {
         gridCells.forEach((gridCell) => gridCell.removeEventListener('mouseenter', paintGridCells));
     }
-});
+}
+
+function createGrid()
+{
+    const gridContainer = document.querySelector('.grid-container');
+    const createGridButton = document.querySelector('.create-grid');
+
+    createGridButton.addEventListener('click', () => {
+        // Delete current grid before creating a new one. This makes sure that
+        // the new grid will replace the old one and not be appended below it instead
+        deleteGrid(gridContainer);
+
+        const gridSize = Number(prompt("Enter size n of new nxn grid:", 16));
+
+        for (let rowCounter = 1; rowCounter <= gridSize; rowCounter++)
+        {
+            let row = document.createElement('div');
+            row.classList.add('row');
+
+            for (let gridCellCounter = 1; gridCellCounter <= gridSize; gridCellCounter++)
+            {
+                let gridCell = document.createElement('div');
+                gridCell.classList.add('grid-cell');
+                row.appendChild(gridCell);
+            }
+
+            gridContainer.appendChild(row);
+        }
+    });
+
+    gridContainer.addEventListener('click', addPaintingInteractionToGrid);
+}
+
+createGrid();
