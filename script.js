@@ -14,9 +14,34 @@ function deleteGrid(gridContainer)
     }
 }
 
+function getRandomValue()
+{
+    return Math.floor((Math.random() * 256));
+}
+
+function getRandomColor()
+{
+    return `rgb(${getRandomValue()}, ${getRandomValue()}, ${getRandomValue()})`
+}
+
 function paintGridCells(event)
 {
-    event.target.style.backgroundColor = '#000';
+    const brushButtons = document.querySelectorAll('.brush');
+
+    for (const brushButton of brushButtons)
+    {
+        if (brushButton.classList.contains('selected'))
+        {
+            if (brushButton.className.includes('single-color'))
+            {
+                event.target.style.backgroundColor = '#000';
+            }
+            else
+            {
+                event.target.style.backgroundColor = getRandomColor();
+            }
+        }
+    }
 }
 
 function addPaintingInteractionToGrid(event)
@@ -34,7 +59,7 @@ function addPaintingInteractionToGrid(event)
         // or the entire grid are painted if the user clicks and drags on the container
         if (event.target.classList.contains('grid-cell'))
         {
-            event.target.style.backgroundColor = '#000';
+            paintGridCells(event);
         }
 
         gridCells.forEach((gridCell) => gridCell.addEventListener('mouseenter', paintGridCells));
@@ -89,4 +114,32 @@ function createGrid()
     gridContainer.addEventListener('click', addPaintingInteractionToGrid);
 }
 
+function removeSelection(brushButtons)
+{
+    for (const brushButton of brushButtons)
+    {
+        if (brushButton.classList.contains('selected'))
+        {
+            brushButton.classList.remove('selected');
+        }
+    }
+}
+
+function addInteractionToButtons()
+{
+    const brushButtons = document.querySelectorAll('.brush');
+
+    for (const brushButton of brushButtons)
+    {
+        brushButton.addEventListener('click', (event) => {
+            // The selection removal on the buttons makes sure that only one
+            // is selected at a time. When a brush button is clicked, any other
+            // button that was selected will be deselected
+            removeSelection(brushButtons);
+            event.target.classList.add('selected');
+        });
+    }
+}
+
 createGrid();
+addInteractionToButtons();
