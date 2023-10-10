@@ -14,14 +14,14 @@ function deleteGrid(gridContainer)
     }
 }
 
-function getRandomValue()
+function getRandomValue(highestValueInRange)
 {
-    return Math.floor((Math.random() * 256));
+    return Math.floor((Math.random() * (highestValueInRange + 1)));
 }
 
 function getRandomColor()
 {
-    return `rgb(${getRandomValue()}, ${getRandomValue()}, ${getRandomValue()})`
+    return `rgb(${getRandomValue(255)}, ${getRandomValue(255)}, ${getRandomValue(255)})`
 }
 
 function paintGridCells(event)
@@ -36,9 +36,10 @@ function paintGridCells(event)
             {
                 event.target.style.backgroundColor = '#000';
             }
-            else
+            else if (brushButton.className.includes('random-color'))
             {
-                event.target.style.backgroundColor = getRandomColor();
+                const randomColor = getRandomColor();
+                event.target.style.backgroundColor = randomColor;
             }
         }
     }
