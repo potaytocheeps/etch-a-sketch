@@ -24,6 +24,41 @@ function getRandomColor()
     return `rgb(${getRandomValue(255)}, ${getRandomValue(255)}, ${getRandomValue(255)})`
 }
 
+function retrieveColorValues(colorString = '')
+{
+    // Get only the numbers part of the color string. The string will come in the form of:
+    // "rgb(redValue, greenValue, blueValue)"
+    colorString = colorString.substring(colorString.indexOf('(') + 1, colorString.indexOf(')'));
+    let RGBColorValuesArray = colorString.split(', ');
+
+    return RGBColorValuesArray.map((colorValue) => Number(colorValue));
+}
+
+function darkenColor(originalColorValuesArray, currentColorValuesArray)
+{
+    for (let index = 0; index < originalColorValuesArray.length; index++)
+    {
+        // This formula will darken the current color by a tenth of its original
+        // shade, meaning that after ten passes, the original color will have completely
+        // turned to black
+        currentColorValuesArray[index] -= ((originalColorValuesArray[index]) / 10);
+    }
+
+    return currentColorValuesArray;
+}
+
+function changeColorShading(event)
+{
+    let currentColor = event.target.style.backgroundColor;
+    let originalColor = event.target.originalColor;
+
+    let currentColorValuesArray = retrieveColorValues(currentColor);
+    let originalColorValuesArray = retrieveColorValues(originalColor);
+
+    let newColorValuesArray = darkenColor(originalColorValuesArray, currentColorValuesArray);
+    return `rgb(${newColorValuesArray[0]}, ${newColorValuesArray[1]}, ${newColorValuesArray[2]})`;
+}
+
 function paintGridCells(event)
 {
     const brushButtons = document.querySelectorAll('.brush');
@@ -35,11 +70,19 @@ function paintGridCells(event)
             if (brushButton.className.includes('single-color'))
             {
                 event.target.style.backgroundColor = '#000';
+                // Create a new property of the event.target object to store the original
+                // color that was used to paint this grid cell. This value can then later be
+                // used for the calculation for darkening the color with the darken color brush
+                event.target.originalColor = event.target.style.backgroundColor;
             }
             else if (brushButton.className.includes('random-color'))
             {
-                const randomColor = getRandomColor();
-                event.target.style.backgroundColor = randomColor;
+                event.target.style.backgroundColor = getRandomColor();
+                event.target.originalColor = event.target.style.backgroundColor;
+            }
+            else if (brushButton.className.includes('darken-color'))
+            {
+                event.target.style.backgroundColor = changeColorShading(event);
             }
         }
     }
