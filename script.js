@@ -47,15 +47,41 @@ function darkenColor(originalColorValuesArray, currentColorValuesArray)
     return currentColorValuesArray;
 }
 
-function changeColorShading(event)
+function lightenColor(originalColorValuesArray, currentColorValuesArray)
+{
+    for (let index = 0; index < originalColorValuesArray.length; index++)
+    {
+        // This formula will lighten the current color by a tenth of its original
+        // shade, meaning that after ten passes, the original color will have completely
+        // turned to white
+        currentColorValuesArray[index] += ((255 - originalColorValuesArray[index]) / 10);
+    }
+
+    return currentColorValuesArray;
+}
+
+function changeColorShading(event, brushType = '')
 {
     let currentColor = event.target.style.backgroundColor;
     let originalColor = event.target.originalColor;
 
     let currentColorValuesArray = retrieveColorValues(currentColor);
     let originalColorValuesArray = retrieveColorValues(originalColor);
+    let newColorValuesArray = null;
 
-    let newColorValuesArray = darkenColor(originalColorValuesArray, currentColorValuesArray);
+    if (brushType.includes('darken-color'))
+    {
+        newColorValuesArray = darkenColor(originalColorValuesArray, currentColorValuesArray);
+    }
+    else if (brushType.includes('lighten-color'))
+    {
+        newColorValuesArray = lightenColor(originalColorValuesArray, currentColorValuesArray);
+    }
+
+    console.log('Original Color: ' + originalColorValuesArray);
+    console.log('Current Color: ' + currentColorValuesArray);
+    console.log('New Color: ' + newColorValuesArray);
+
     return `rgb(${newColorValuesArray[0]}, ${newColorValuesArray[1]}, ${newColorValuesArray[2]})`;
 }
 
@@ -80,9 +106,9 @@ function paintGridCells(event)
                 event.target.style.backgroundColor = getRandomColor();
                 event.target.originalColor = event.target.style.backgroundColor;
             }
-            else if (brushButton.className.includes('darken-color'))
+            else if (brushButton.className.includes('darken-color') || brushButton.className.includes('lighten-color'))
             {
-                event.target.style.backgroundColor = changeColorShading(event);
+                event.target.style.backgroundColor = changeColorShading(event, brushButton.className);
             }
         }
     }
