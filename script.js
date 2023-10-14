@@ -34,27 +34,93 @@ function retrieveColorValues(colorString = '')
     return RGBColorValuesArray.map((colorValue) => Number(colorValue));
 }
 
-function darkenColor(originalColorValuesArray, currentColorValuesArray)
+function checkShadingThreshold(originalColorValuesArray, currentColorValuesArray, shadingType)
+{
+    let passesThreshold = true;
+
+    for (let index = 0; index < originalColorValuesArray.length; index++)
+    {
+        if (shadingType === 'darkening')
+        {
+            // If at least one color value is still above the original color value, then
+            // the threshold has not yet been achieved, meaning that we have not yet arrived
+            // at the original shading
+            if (currentColorValuesArray[index] > originalColorValuesArray[index])
+            {
+                passesThreshold = false;
+            }
+        }
+        else if (shadingType === 'lightening')
+        {
+            if (currentColorValuesArray[index] < originalColorValuesArray[index])
+            {
+                passesThreshold = false;
+            }
+        }
+    }
+
+    return passesThreshold;
+}
+
+function darkenColor(event, originalColorValuesArray, currentColorValuesArray)
 {
     for (let index = 0; index < originalColorValuesArray.length; index++)
     {
-        // This formula will darken the current color by a tenth of its original
-        // shade, meaning that after ten passes, the original color will have completely
-        // turned to black
-        currentColorValuesArray[index] -= ((originalColorValuesArray[index]) / 10);
+        if (event.target.classList.contains('lightened'))
+        {
+            // This formula works only when the lighten color brush has been previously
+            // used on a colored grid cell. It will darken a lightened color back to its
+            // original shade after, at most, ten steps
+            currentColorValuesArray[index] -= Math.ceil(((255 - originalColorValuesArray[index]) / 10));
+
+            // Once the RGB values for the current color go below the grid cell's original
+            // color values, the current color values will be replaced by the original color values. This
+            // makes sure that the grid cell's color will arrive back at its original shading after having
+            // been lightened and then darkened
+            if (index >= 2 && checkShadingThreshold(originalColorValuesArray, currentColorValuesArray, 'darkening'))
+            {
+                currentColorValuesArray = originalColorValuesArray;
+                return currentColorValuesArray;
+            }
+        }
+        else
+        {
+            // This formula will darken the current color by a tenth of its original
+            // shade, meaning that after ten passes, the original color will have completely
+            // turned to black
+            currentColorValuesArray[index] -= Math.ceil(((originalColorValuesArray[index]) / 10));
+        }
     }
 
     return currentColorValuesArray;
 }
 
-function lightenColor(originalColorValuesArray, currentColorValuesArray)
+function lightenColor(event, originalColorValuesArray, currentColorValuesArray)
 {
     for (let index = 0; index < originalColorValuesArray.length; index++)
     {
-        // This formula will lighten the current color by a tenth of its original
-        // shade, meaning that after ten passes, the original color will have completely
-        // turned to white
-        currentColorValuesArray[index] += ((255 - originalColorValuesArray[index]) / 10);
+        if (event.target.classList.contains('darkened'))
+        {
+            // This formula will bring the shading back to the original color after at most
+            // ten steps, only if the grid cell has been previously darkened
+            currentColorValuesArray[index] += Math.ceil((originalColorValuesArray[index] / 10));
+
+            // When all of the current color values go above the original color values, assign the
+            // original color to the current color and return it, this makes sure that we arrive
+            // back at the exact same shade of the original color after having darkened it and then lightened it
+            if (index >= 2 && checkShadingThreshold(originalColorValuesArray, currentColorValuesArray, 'lightening'))
+            {
+                currentColorValuesArray = originalColorValuesArray;
+                return currentColorValuesArray;
+            }
+        }
+        else
+        {
+            // This formula will lighten the current color by a tenth of its original
+            // shade, meaning that after ten passes, the original color will have completely
+            // turned to white
+            currentColorValuesArray[index] += Math.ceil(((255 - originalColorValuesArray[index]) / 10));
+        }
     }
 
     return currentColorValuesArray;
@@ -69,18 +135,26 @@ function changeColorShading(event, brushType = '')
     let originalColorValuesArray = retrieveColorValues(originalColor);
     let newColorValuesArray = null;
 
+    // This fixes a bug where using a shading brush on a grid cell would not have any effect on
+    // its color because of the interaction of the grid cell having a 'darkened' or 'lightened'
+    // class. The class would be removed on the first pass, and then it would be shaded on the
+    // second pass, causing a clunky interaction. Removing them makes sure that edge case does not occur
+    if (currentColor === originalColor)
+    {
+        event.target.classList.remove('darkened');
+        event.target.classList.remove('lightened');
+    }
+
     if (brushType.includes('darken-color'))
     {
-        newColorValuesArray = darkenColor(originalColorValuesArray, currentColorValuesArray);
+        newColorValuesArray = darkenColor(event, originalColorValuesArray, currentColorValuesArray);
+        event.target.classList.add('darkened');
     }
     else if (brushType.includes('lighten-color'))
     {
-        newColorValuesArray = lightenColor(originalColorValuesArray, currentColorValuesArray);
+        newColorValuesArray = lightenColor(event, originalColorValuesArray, currentColorValuesArray);
+        event.target.classList.add('lightened');
     }
-
-    console.log('Original Color: ' + originalColorValuesArray);
-    console.log('Current Color: ' + currentColorValuesArray);
-    console.log('New Color: ' + newColorValuesArray);
 
     return `rgb(${newColorValuesArray[0]}, ${newColorValuesArray[1]}, ${newColorValuesArray[2]})`;
 }
