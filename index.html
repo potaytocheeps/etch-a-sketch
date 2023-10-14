@@ -7,13 +7,26 @@
   <script src="./script.js" defer></script>
 </head>
 <body>
-  <div class="button-container">
-    <button class="brush lighten-color-button">Lighten Color Brush</button>
-    <button class="brush darken-color-button">Darken Color Brush</button>
-    <button class="brush random-color-button">Random Color Brush</button>
-    <button class="create-grid">Create New Grid</button>
-    <button class="brush single-color-button">Single Color Brush</button>
+  <div class="button-and-grid-container">
+    <div class="button-container">
+      <div class="grid-buttons-container">
+        <button class="create-grid">Create New Grid</button>
+      </div>
+      <div class="coloring-brush-container">
+        <button class="brush single-color-button">Single Color Brush</button>
+        <button class="brush random-color-button">Random Color Brush</button>
+      </div>
+      <div class="shading-brush-container">
+        <button class="brush lighten-color-button">Lighten Color Brush</button>
+        <button class="brush darken-color-button">Darken Color Brush</button>
+      </div>
+    </div>
+    <div class="grid-container">
+      <p class="grid-message">
+        Click "Create New Grid"<br>
+        To Begin!
+      </p>
+    </div>
   </div>
-  <div class="grid-container"></div>
 </body>
 </html>
