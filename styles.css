@@ -8,14 +8,22 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 50px;
+  margin-top: 50px;
+  color: #3C2829;
 }
 
 .button-and-grid-container {
-  max-width: 900px;
+  width: 900px;
   display: flex;
   justify-content: space-around;
   flex: 1;
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .button-container {
