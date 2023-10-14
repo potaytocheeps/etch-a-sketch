@@ -5,7 +5,7 @@
 
 body {
   background-color: #FFE4E4;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Courier New', Courier, monospace;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -19,6 +19,7 @@ body {
 }
 
 .button-and-grid-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   width: 900px;
   display: flex;
   justify-content: space-around;
