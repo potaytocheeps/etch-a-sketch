@@ -275,6 +275,7 @@ function removeSelection(brushButtons)
 function addInteractionToButtons()
 {
     const brushButtons = document.querySelectorAll('.brush');
+    const clearGridButton = document.querySelector('.clear-grid');
 
     for (const brushButton of brushButtons)
     {
@@ -286,6 +287,14 @@ function addInteractionToButtons()
             event.target.classList.add('selected');
         });
     }
+
+    clearGridButton.addEventListener('click', () => {
+        const gridCells = document.querySelectorAll('.grid-cell');
+
+        gridCells.forEach((gridCell) => {
+            gridCell.style.backgroundColor = '';
+        });
+    });
 }
 
 createGrid();

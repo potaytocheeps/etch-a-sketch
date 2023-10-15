@@ -62,6 +62,10 @@ button:hover {
   color: #FFE4E4;
 }
 
+.grid-buttons-container button:active {
+  background-color: #AA59A2;
+}
+
 .grid-container {
   display: flex;
   flex-direction: column;
