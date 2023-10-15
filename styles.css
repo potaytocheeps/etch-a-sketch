@@ -68,7 +68,7 @@ button:hover {
   width: 500px;
   height: 500px;
   border: black outset 2px;
-  box-shadow: #574142 8px 6px 10px;
+  box-shadow: #463233 3px 4px 4px;
 }
 
 .row {
@@ -77,7 +77,7 @@ button:hover {
 }
 
 .grid-cell {
-  border: 1px solid #9C9C9C;
+  border: 1px solid #988080;
   flex: 1;
 }
 
