@@ -220,6 +220,7 @@ function getUserInput()
 
     while (userInput <= 0 || userInput > 100)
     {
+        if (userInput === 0) return;
         alert("Please enter a number that is within the range of 1-100.");
         userInput = Number(prompt("Enter size n of new nxn grid (must be within range of 1-100):", 16));
     }
@@ -233,11 +234,13 @@ function createGrid()
     const createGridButton = document.querySelector('.create-grid');
 
     createGridButton.addEventListener('click', () => {
+        const gridSize = getUserInput();
+
+        if (gridSize === 0 || isNaN(gridSize)) return;
+
         // Delete current grid before creating a new one. This makes sure that
         // the new grid will replace the old one and not be appended below it instead
         deleteGrid(gridContainer);
-
-        const gridSize = getUserInput();
 
         for (let rowCounter = 1; rowCounter <= gridSize; rowCounter++)
         {
