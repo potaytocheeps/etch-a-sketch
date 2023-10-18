@@ -36,7 +36,8 @@ body {
 
 .coloring-brush-container,
 .shading-brush-container,
-.grid-buttons-container {
+.grid-buttons-container,
+.miscellaneous-buttons-container {
   display: flex;
   flex-direction: column;
   gap: 5px;

@@ -184,6 +184,10 @@ function paintGridCells(event)
             {
                 event.target.style.backgroundColor = changeColorShading(event, brushButton.className);
             }
+            else if (brushButton.className.includes('eraser'))
+            {
+                event.target.style.backgroundColor = '';
+            }
         }
     }
 }
